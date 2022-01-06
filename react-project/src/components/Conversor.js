@@ -11,8 +11,18 @@ export default class Conversor extends Component{
             'moedaB_valor': 0,
 
         }
+
     }
+    validation = () => {
+        if(this.state.moedaA_valor == '' || typeof(this.state.moedaA_valor) == 'string' ){
+            alert('Insert a valid number.')
+            
+        }
+    }
+    
     convertValue = () => {
+        this.validation();
+
         let value = `${this.props.moedaA}_${this.props.moedaB}`
         
         fetch(`https://free.currconv.com/api/v7/convert?q=${value}&compact=ultra&apiKey=c7a6c1c43010dabfc100`)
@@ -26,7 +36,10 @@ export default class Conversor extends Component{
         })
         .catch(error => console.log(error))
         
+        
     }
+    
+
 
     render(){
         return(
