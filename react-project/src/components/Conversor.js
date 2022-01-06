@@ -1,70 +1,45 @@
-import React, {Component} from "react"
+// import React, {Component} from "react"
+import React, {useState} from "react"
 import styles from './Conversor.css';
 
-export default class Conversor extends Component{
+function Conversor({moedaA, moedaB}){
+    const [moedaA_valor, setMoedaA] = useState('')
+    const [moedaB_valor, setMoedaB] = useState(0)
 
-    constructor(props){
-        super(props);
-
-        this.state = {
-            'moedaA_valor': '',
-            'moedaB_valor': 0,
-
-        }
-
+    const getValue = (e) => {
+        setMoedaA(e.target.value)
     }
-    validation = () => {
-        if(this.state.moedaA_valor == '' || typeof(this.state.moedaA_valor) == 'string' ){
-            alert('Insert a valid number.')
-            
-        }
-    }
-    
-    convertValue = () => {
-        this.validation();
 
-        let value = `${this.props.moedaA}_${this.props.moedaB}`
-        
+    const convertValue = () => {
+        let value = `${moedaA}_${moedaB}`
+
         fetch(`https://free.currconv.com/api/v7/convert?q=${value}&compact=ultra&apiKey=c7a6c1c43010dabfc100`)
         .then((res) => res.json())
         .then((json) => {
             console.log(json)
-            let cotacao = json[value];
-            let moedaB_valor = (parseFloat(this.state.moedaA_valor * cotacao)).toFixed(2);
-            this.setState({moedaB_valor});
+            let cotacao = json[value]
+
+            let moedaB_valor = (Number(moedaA_valor * cotacao)).toFixed(2);
+            console.log(moedaB_valor)
+
+            setMoedaB(moedaB_valor);
             
         })
         .catch(error => console.log(error))
-        
-        
-    }
     
-
-
-    render(){
-        return(
-            <div className="conversor">
-                <h2> {this.props.moedaA} to {this.props.moedaB} </h2>
-                <input type="text" autoComplete="off" placeholder="Insert the value" id="iptValue" onChange={(e) => {
-                    this.setState({moedaA_valor:e.target.value})}
-                    }/>
-                <input className="button" type="button" value='Convert it' onClick={this.convertValue} />
-                <div className="result">
-                    <span> R${this.state.moedaB_valor} </span>
-                </div>
-
-            </div>
-
-        )
-
     }
-
-
-
-
-
-
-
-
+   
+    return(
+        <div className="conversor">
+            <h2> {moedaA} to {moedaB} </h2>
+            <input type="text" autoComplete="off" placeholder="Insert the value" id="iptValue" onChange={getValue}/>
+            <input className="button" type="button" value='Convert it' onClick={convertValue} />
+            <div className="result">
+                <span> R${moedaB_valor} </span>
+            </div>
+        </div>
+    )
 
 }
+
+export default Conversor
