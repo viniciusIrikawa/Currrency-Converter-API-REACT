@@ -5,30 +5,38 @@ import styles from './Conversor.css';
 function Conversor(){
     const [moedaA_valor, setMoedaA] = useState('USD');
     const [moedaB_valor, setMoedaB] = useState('BRL');
-    const [inputValue, setInputValue] = useState();
+    const [inputValue, setInputValue] = useState('');
 
     const [result, setResult] = useState(0);
 
     const getDropdownValue = (e) => {
         // console.log(e.target.value);
         setMoedaA(e.target.value);
-    };
+    }
+      
+      const getValue = (e) => {
+        setInputValue(e.target.value)
+    }
 
-    const getValue = (e) => {
-        setInputValue(e.target.value);
-    };
+    const validation = () => {
+      console.log(typeof inputValue)
+      if (inputValue == '') {
+        alert('Please, insert a valid number!')
+      }
+    }
 
     const convertValue = () => {
-        const value = `${moedaA_valor}_${moedaB_valor}`;
-        console.log(value)
+      validation()
 
-        fetch(`https://free.currconv.com/api/v7/convert?q=${value}&compact=ultra&apiKey=c7a6c1c43010dabfc100`)
-        .then((res) => res.json())
-        .then((json) => {
-            setResult(json[value] * inputValue)
-        })
-        .catch((error) => console.log(error));
-    
+      const value = `${moedaA_valor}_${moedaB_valor}`;
+      console.log(value)
+
+      fetch(`https://free.currconv.com/api/v7/convert?q=${value}&compact=ultra&apiKey=c7a6c1c43010dabfc100`)
+      .then((res) => res.json())
+      .then((json) => {
+          setResult(json[value] * inputValue)
+      })
+      .catch((error) => console.log(error));
     }
    
     return(
